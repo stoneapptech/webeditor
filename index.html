@@ -8,8 +8,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
     <!-- Tocas UI End -->
-</head>
-<body>
     <style>
         body {
             height: 100vh;
@@ -17,9 +15,11 @@
         }
 
         .main {
-            height: calc(100vh - 59px);
-            position:absolute;
-            bottom:0px;
+            height: calc(100vh - 63px);
+        }
+
+        #menu {
+            z-index: 1;
         }
 
         .grid,.row {
@@ -37,19 +37,21 @@
             top: 0;
             right: 0;
             bottom: 0;
-            left: 0;        
+            left: 0;
+            line-height: 17px;
         }
 
         [class*="ace"] {
-            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
         }
 
         #script,#show {
+            position: relative;
             overflow: hidden;
         }
 
         iframe {
-            height: calc(100% - 30px);
+            height: 100%;
             width:100%;
             border:0;
             overflow: hidden;
@@ -61,6 +63,7 @@
             color: white;
             padding: 5px 12px;
             font-size:16px;
+            display: block;
         }
 
         .logo {
@@ -68,37 +71,57 @@
             width: 35px;
         }
 
+        .ts.tab.segment {
+            height: 100%;
+        }
+
+        .version {
+            bottom:0;
+            margin-bottom: 10px !important;
+            margin-top: 10px !important;
+            margin:auto;
+        }
+
     </style>
+</head>
+<body>
+    <div class="ts overlapped left sidebar inverted vertical menu">
+        <a class="item"><img class="logo" src="http://www.ck.tp.edu.tw/~ck1060548/logo.png"></a>
+        <a class="item">Test</a>
+        <a class="bottom item" target="_blank" href="https:/github.com/stoneapptech/webeditor"><i class="github icon"></i>Github</a>
+        <p class="version">Dev 1.0</p>
+    </div>
 
-
-    <!--Header menu-->
-    <div class="ts fluid container">
-        <div id="menu" class="ts pointing secondary menu">
-            <a class="active item" data-tab="html">HTML</a>
-            <a class="item" data-tab="css">CSS</a>
-            <a class="item" data-tab="javascript">JS</a>
-            <a class="item" href="javascript:load()">RUN</a>
-            <a class="item" href="javascript:clear()">RESET</a>
-            <div class="right menu">
-                <div class="tablet or large device only only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="http://www.ck.tp.edu.tw/~ck1060548/logo.png">&nbsp;Stone App</a></div>
-                <div class="mobile only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="http://www.ck.tp.edu.tw/~ck1060548/logo.png"></a></div>
+    <div class="pusher">
+        <!--Header menu-->
+        <div class="ts fluid container">
+            <div id="menu" class="ts horizontally scrollable borderless flatted menu">
+                <a class="item" href="javascript:side_bar()"><i class="sidebar icon"></i></a>
+                <a class="active item" data-tab="html">HTML</a>
+                <a class="item" data-tab="css">CSS</a>
+                <a class="item" data-tab="javascript">JS</a>
+                <a class="item" href="javascript:load()">RUN</a>
+                <a class="item" href="javascript:clear()">RESET</a>
+                <div class="right menu">
+                    <div class="tablet or large device only only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="https://www.ck.tp.edu.tw/~ck1060548/logo.png">&nbsp;Stone App</a></div>
+                    <div class="mobile only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="https://www.ck.tp.edu.tw/~ck1060548/logo.png"></a></div>
+                </div>
             </div>
         </div>
-     </div>
-    <!--menu end-->
+        <!--menu end-->
 
         <div class="main ts fluid container">
             <div class="ts grid">
                 <div class="two column row">
                     <!--textarea-->
                     <div id="script" class="column">
-                        <div data-tab="html" class="main ts active bottom attached tab segment">
+                        <div data-tab="html" class="ts active bottom attached tab segment">
                             <div id="html"></div>
                         </div>
-                        <div data-tab="css" class="main ts bottom attached tab segment">
+                        <div data-tab="css" class="ts bottom attached tab segment">
                             <div id="css"></div>
                         </div>
-                        <div data-tab="javascript" class="main ts bottom attached tab segment">
+                        <div data-tab="javascript" class="ts bottom attached tab segment">
                             <div id="javascript"></div>
                         </div>
                     </div>
@@ -114,10 +137,8 @@
                 </div>
             </div>
         </div>
+    </div>
 
-
-
-    <!--ace editor start-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
 
@@ -131,25 +152,23 @@
         var list = ["html","css","javascript"];
         var object = [html,css,js];
         var content = `<!DOCTYPE html>\n<html>\n    <head>\n        <title>Title</title> \n    </head>\n    <body>\n        <p>試試看，雖然我覺得不行。</p>\n    </body>\n</html>`;
-        var stylesheet;
-        var script;
-        var page;
+        var stylesheet,script,page;
 
         // initialize the environment    
         function startace(lang,editor) {
             var setmode = "ace/mode/" + lang;
             editor.setTheme("ace/theme/chrome");
             editor.getSession().setMode(setmode);
-            editor.resize();
             editor.getSession().setUseWrapMode(true);
         }
 
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded",function() {
             for (i = 0; i< list.length ; i++) {
                 startace(list[i],object[i]);
             }
             ts('.menu .item').tab(); // ts menu tab
-        }
+            update();
+        })
 
         html.setValue(content);
         load();
@@ -170,6 +189,7 @@
             html.setValue(content);
             css.setValue("");
             js.setValue("");
+            editorResize();
             load();
         }
 
@@ -183,8 +203,19 @@
             page = page.replace('</head>', script);
         }
 
-    </script>
-    <!--ace editor end-->
+        function side_bar() {
+            ts('.left.sidebar').sidebar({
+                dimPage: true,
+                closeable: false
+            }).sidebar('toggle');
+        }
 
+        function update() {
+            document.querySelector('a[data-tab="html"]').addEventListener("click", function(){ html.renderer.updateFull(); });
+            document.querySelector('a[data-tab="css"]').addEventListener("click", function(){ css.renderer.updateFull(); });
+            document.querySelector('a[data-tab="javascript"]').addEventListener("click", function(){ js.renderer.updateFull(); });
+        }
+
+    </script>
 </body>
 </html>
