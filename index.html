@@ -162,14 +162,16 @@
             editor.getSession().setUseWrapMode(true);
         }
 
-        document.addEventListener("DOMContentLoaded",function() {
-            for (i = 0; i< list.length ; i++) {
-                startace(list[i],object[i]);
-            }
-            ts('.menu .item').tab(); // ts menu tab
-            update();
-        })
-
+        for (i = 0; i< list.length ; i++) {
+            startace(list[i],object[i]);
+        }
+        ts('.menu .item').tab(); // ts menu tab
+        ts('.left.sidebar').sidebar({
+                dimPage: true,
+                closeable: false
+        });
+        update();
+        
         html.setValue(content);
         load();
         // finish
@@ -204,10 +206,7 @@
         }
 
         function side_bar() {
-            ts('.left.sidebar').sidebar({
-                dimPage: true,
-                closeable: false
-            }).sidebar('toggle');
+            ts('.left.sidebar').sidebar('toggle');
         }
 
         function update() {
