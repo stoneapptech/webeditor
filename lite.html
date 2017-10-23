@@ -37,7 +37,7 @@
             top: 0;
             right: 0;
             bottom: 0;
-            left: 0;
+            left: 0;        
         }
 
         [class*="ace"] {
@@ -67,6 +67,7 @@
             height: 35px;
             width: 35px;
         }
+
     </style>
 
 
@@ -79,8 +80,8 @@
             <a class="item" href="javascript:load()">RUN</a>
             <a class="item" href="javascript:clear()">RESET</a>
             <div class="right menu">
-                <div class="tablet or large device only only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="https://www.ck.tp.edu.tw/~ck1060548/logo.png">&nbsp;Stone App</a></div>
-                <div class="mobile only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="https://www.ck.tp.edu.tw/~ck1060548/logo.png"></a></div>
+                <div class="tablet or large device only only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="http://www.ck.tp.edu.tw/~ck1060548/logo.png">&nbsp;Stone App</a></div>
+                <div class="mobile only"><a target="_blank" href="http://stoneapp.tech" class="item"><img class="logo" src="http://www.ck.tp.edu.tw/~ck1060548/logo.png"></a></div>
             </div>
         </div>
      </div>
@@ -130,25 +131,26 @@
         var list = ["html","css","javascript"];
         var object = [html,css,js];
         var content = `<!DOCTYPE html>\n<html>\n    <head>\n        <title>Title</title> \n    </head>\n    <body>\n        <p>試試看，雖然我覺得不行。</p>\n    </body>\n</html>`;
-        var stylesheet,script,page;
+        var stylesheet;
+        var script;
+        var page;
 
         // initialize the environment    
         function startace(lang,editor) {
             var setmode = "ace/mode/" + lang;
             editor.setTheme("ace/theme/chrome");
             editor.getSession().setMode(setmode);
-            editor.getSession().setUseWrapMode(true);
             editor.resize();
-            editor.$blockScrolling = Infinity;
+            editor.getSession().setUseWrapMode(true);
         }
 
-        document.addEventListener('DOMContentLoaded',function() {
+        window.onload = function() {
             for (i = 0; i< list.length ; i++) {
                 startace(list[i],object[i]);
             }
             ts('.menu .item').tab(); // ts menu tab
             update();
-        })
+        }
 
         html.setValue(content);
         load();
