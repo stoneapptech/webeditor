@@ -18,8 +18,10 @@
 
         .main {
             height: calc(100vh - 59px);
-            position:absolute;
-            bottom:0px;
+        }
+
+        #menu {
+            z-index: 1;
         }
 
         .grid,.row {
@@ -37,19 +39,21 @@
             top: 0;
             right: 0;
             bottom: 0;
-            left: 0;        
+            left: 0;
+            line-height: 17px;
         }
 
         [class*="ace"] {
-            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
         }
 
         #script,#show {
+            position: relative;
             overflow: hidden;
         }
 
         iframe {
-            height: calc(100% - 30px);
+            height: 100%;
             width:100%;
             border:0;
             overflow: hidden;
@@ -61,11 +65,16 @@
             color: white;
             padding: 5px 12px;
             font-size:16px;
+            display: block;
         }
 
         .logo {
             height: 35px;
             width: 35px;
+        }
+
+        .ts.tab.segment {
+            height: 100%;
         }
 
     </style>
@@ -92,13 +101,13 @@
                 <div class="two column row">
                     <!--textarea-->
                     <div id="script" class="column">
-                        <div data-tab="html" class="main ts active bottom attached tab segment">
+                        <div data-tab="html" class="ts active bottom attached tab segment">
                             <div id="html"></div>
                         </div>
-                        <div data-tab="css" class="main ts bottom attached tab segment">
+                        <div data-tab="css" class="ts bottom attached tab segment">
                             <div id="css"></div>
                         </div>
-                        <div data-tab="javascript" class="main ts bottom attached tab segment">
+                        <div data-tab="javascript" class="ts bottom attached tab segment">
                             <div id="javascript"></div>
                         </div>
                     </div>
