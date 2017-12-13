@@ -57,8 +57,8 @@ function addcss() {
 }
 
 function addjs() {
-    script = '<script>' + js.getValue() + '<' + '/script>' + '</head>';
-    page = page.replace('</head>', script);
+    script = '<script>' + js.getValue() + '<' + '/script>' + '</body>';
+    page = page.replace('</body>', script);
 }
 
 function update() {
