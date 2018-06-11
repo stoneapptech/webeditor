@@ -26,8 +26,8 @@ for (i = 0; i< list.length ; i++) {
 }
 ts('.menu .item').tab(); // ts menu tab
 ts('.left.sidebar').sidebar({
-        dimPage: true,
-        closeable: false
+    dimPage: true,
+    closeable: false
 });
 update();
 
@@ -65,8 +65,8 @@ function addcss() {
 }
 
 function addjs() {
-    script = '<script>' + js.getValue() + '<' + '/script>' + '</head>';
-    page = page.replace('</head>', script);
+    script = '<script>' + js.getValue() + '<' + '/script>' + '</body>';
+    page = page.replace('</body>', script);
 }
 
 function side_bar() {
