@@ -10,7 +10,7 @@ var label = document.getElementById("label");
 var dimmer = document.getElementById("dimmer");
 var list = ["html","css","javascript"];
 var object = [html,css,js];
-var content = `<!DOCTYPE html>\n<html>\n    <head>\n        <title>Title</title> \n    </head>\n    <body>\n        <p>試試看，雖然我覺得不行。</p>\n    </body>\n</html>`;
+var content = `<!DOCTYPE html>\n<html>\n    <head>\n        <title>Title</title>\n    </head>\n    <body>\n        <p>試試看，雖然我覺得不行。</p>\n    </body>\n</html>`;
 var stylesheet,script,page;
 
 // initialize the environment    
