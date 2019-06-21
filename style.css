@@ -36,7 +36,7 @@ body {
 }
 
 [class*="ace"] {
-    font: 14px/normal 'Monaco', 'Menlo', 'Consolas', 'source-code-pro', "微軟正黑體", "Microsoft YaHei" monospace !important;
+    font: 14px/normal 'Monaco', 'Menlo', 'Consolas', 'source-code-pro', "微軟正黑體", "Microsoft YaHei", monospace !important;
 }
 
 #code, #preview {
