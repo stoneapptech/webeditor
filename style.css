@@ -3,25 +3,30 @@ body {
     margin: 0;
 }
 
-.main {
-    height: calc(100vh - 63px);
+.pusher {
+    display: flex;
+    flex-direction: column;
+}
+
+#main {
+    flex-grow: 1;
 }
 
 #menu {
     z-index: 1;
 }
 
-.grid,.row {
-    margin: 0 !important;
+.ts.grid, .ts.grid > .row {
+    margin: 0;
     height: 100%;
 }
 
-.column {
-    padding: 0 !important;
-    height: 100% !important;
+.ts.grid > .row .column:not(.row) {
+    padding: 0;
+    height: 100%;
 }
 
-#html, #css, #javascript {
+#code .editor {
     position: absolute;
     top: 0;
     right: 0;
@@ -31,10 +36,10 @@ body {
 }
 
 [class*="ace"] {
-    font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+    font: 14px/normal 'Monaco', 'Menlo', 'Consolas', 'source-code-pro', "微軟正黑體", "Microsoft YaHei" monospace !important;
 }
 
-#script,#show {
+#code, #preview {
     position: relative;
     overflow: hidden;
 }

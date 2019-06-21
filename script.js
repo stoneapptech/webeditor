@@ -1,101 +1,151 @@
-// Dev 1.1
-// (c) Copyright 2015-2017 Stone App Technology Studio.
+// Dev 2.0
+// (c) Copyright 2015-2019 Stone App Technology Studio.
+
+let $ = (selector) => { 
+    let elements = document.querySelectorAll(selector);
+    if (elements.length == 1) return document.querySelector(selector);
+    else return elements;
+}
+
+function click(el, listener) {
+    return el.addEventListener('click', (e) => {
+        try {
+            listener(e);
+        } catch (error) {
+            console.error(error);
+        }
+    });
+}
+
+async function sleep(ms) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms);
+    });
+}
 
 // initialize the variable
-var html = ace.edit("html");
-var css = ace.edit("css");
-var js = ace.edit("javascript");
-var frame = document.getElementById("frame");
-var label = document.getElementById("label");
-var dimmer = document.getElementById("dimmer");
-var list = ["html","css","javascript"];
-var object = [html,css,js];
-var content = `<!DOCTYPE html>\n<html>\n    <head>\n        <title>Title</title>\n    </head>\n    <body>\n        <p>試試看，雖然我覺得不行。</p>\n    </body>\n</html>`;
-var stylesheet,script,page;
+let editors = {};
+
+let previewFrame = $("#preview iframe");
+let titleLabel = $('#label');
+let dimmer = $('.ts.dimmer');
+
+const languages = ["html","css","javascript"];
+
+const exampleContent = `<!DOCTYPE html>\n<html>\n    <head>\n        <title>Title</title>\n    </head>\n    <body>\n        <p>試試看，雖然我覺得不行。</p>\n    </body>\n</html>`;
 
 // initialize the environment    
-function startace(lang,editor) {
-    var setmode = "ace/mode/" + lang;
-    editor.setTheme("ace/theme/chrome");
-    editor.getSession().setMode(setmode);
-    editor.getSession().setUseWrapMode(true);
-}
+languages.forEach((lang) => {
+    let editor = ace.edit(lang);
+    editors[lang] = editor;
 
-for (i = 0; i< list.length ; i++) {
-    startace(list[i],object[i]);
-}
+    editor.setTheme("ace/theme/chrome");
+    editor.getSession().setMode(`ace/mode/${lang}`);
+    editor.getSession().setUseWrapMode(true);
+    editor.$blockScrolling = Infinity;
+});
+
 ts('.menu .item').tab(); // ts menu tab
 ts('.left.sidebar').sidebar({
-    dimPage: true,
-    closeable: false
+        dimPage: true,
+        closeable: false
 });
-update();
 
-html.setValue(content);
-load();
-// finish
+// setup menu listener
+languages.forEach((lang) => {
+    click($(`a[data-tab="${lang}"]`), (e) => {
+        editors[lang].renderer.updateFull();
+    });
+});
+
+click($('#sidebarMenu'), (e) => {
+    ts('.ts.sidebar').sidebar('toggle');
+});
+
+click($('#run'), render);
+
+window.addEventListener('message', async (e) => {
+    console.log('onmessage');
+    let data = e.data;
+    titleLabel.textContent = data.title;
+    await sleep(300);
+    dimmer.classList.toggle('active', false);
+});
+
+click($('#reset'), (e) => {
+    editors.html.setValue(exampleContent);
+    editors.css.setValue("");
+    editors.javascript.setValue("");
+});
+
+editors.html.setValue(exampleContent);
+
+render();
+
+function combinePage(HTMLSource, cssSource, jsSource) {
+    let parser = new DOMParser();
+    let shadowDOM = parser.parseFromString(HTMLSource, 'text/html');
+
+    if (cssSource.trim() != "") {
+        let stylesheet = document.createElement('style');
+        stylesheet.textContent = cssSource;
+        shadowDOM.querySelector('head').appendChild(stylesheet);
+    }
+
+    if (jsSource.trim() != "") {
+        let script = document.createElement('script');
+        script.textContent = jsSource;
+        shadowDOM.querySelector('body').appendChild(script);
+    }
+
+    // post process to disable dimmer and update title
+    let postSource = `(() => {
+        console.log('iframe ready');
+        parent.postMessage({"status": "ready", "title": (document.title || "No title")}, "*");
+    })()`;
+    let postScript = document.createElement('script');
+    postScript.textContent = postSource;
+    shadowDOM.querySelector('body').appendChild(postScript);
+
+    return shadowDOM;
+}
+
+function render(...args) {
+    console.log('render')
+    dimmer.classList.toggle("active", true);
+
+    let source = languages.map((lang, _i) => {
+        return editors[lang].getValue();
+    });
+
+    let newDocument = combinePage(...source);
+
+    previewFrame.setAttribute("srcdoc", newDocument.documentElement.outerHTML);
+    previewFrame.srcdoc = previewFrame.srcdoc;
+}
 
 // welcome
 if (!localStorage.getItem("visited")) {
-    welcome();
+    welcomeMessage();
 }
 
-function load() {
-    dimmer.classList.add("active");
-    page = html.getValue();
-    addcss();
-    addjs();
-    frame.setAttribute("srcdoc",page);
-    frame.srcdoc = frame.srcdoc;
-    setTimeout('label.innerHTML = frame.contentWindow.document.title;',300);
-    setTimeout('dimmer.classList.remove("active");',500);
-}
-
-function clear() {
-    html.setValue(content);
-    css.setValue("");
-    js.setValue("");
-    editorResize();
-    load();
-}
-
-function addcss() {
-    stylesheet = '<style>' + css.getValue() + '</style>' + '</head>';
-    page = page.replace('</head>', stylesheet);
-}
-
-function addjs() {
-    script = '<script>' + js.getValue() + '<' + '/script>' + '</body>';
-    page = page.replace('</body>', script);
-}
-
-function side_bar() {
-    ts('.left.sidebar').sidebar('toggle');
-}
-
-function update() {
-    document.querySelector('a[data-tab="html"]').addEventListener("click", function(){ html.renderer.updateFull(); });
-    document.querySelector('a[data-tab="css"]').addEventListener("click", function(){ css.renderer.updateFull(); });
-    document.querySelector('a[data-tab="javascript"]').addEventListener("click", function(){ js.renderer.updateFull(); });
-}
-
-function setStorage() {
+function setState() {
     localStorage.setItem('visited','true');
 }
 
-function welcome() {
+function welcomeMessage() {
     swal({
         html: '<h1 class="ts center aligned header">歡迎!第一次使用!</h1>',
         type: "success"
     });
-    setStorage();
+    setState();
 }
 
 function info() {
     swal({
         type: "info",
         html: '<h2 class="ts center aligned header">About</h2>'+'<a target="_blank" href="https://tocas-ui.com/">TocasUI</a>'+' / '+'<a target="_blank" href="https://ace.c9.io/">Ace Editor</a>'
-              +'<p>(c) Copyright 2015-2017 Stone App Technology Studio.</p>',
+              +'<p>(c) Copyright 2015-2019 Stone App Technology Studio.</p>',
         showConfirmButton: false
     });
 }

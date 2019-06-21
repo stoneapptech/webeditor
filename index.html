@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Web Editor</title>
 	<!-- Tocas UI -->
-	<link rel="stylesheet" href="./dist/tocas.css">
-	<script src="./dist/tocas.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
     <!-- Tocas UI End -->
     <script src="https://unpkg.com/sweetalert2@7.0.6/dist/sweetalert2.all.js"></script>
     <link rel="stylesheet" href="./style.css" type="text/css">
@@ -16,19 +16,19 @@
         <a class="item"><img class="logo" src="https://stoneapp.tech/asset/logo.png"></a>
         <a class="item" href="javascript:info();">About</a>
         <a class="bottom item" target="_blank" href="https://github.com/stoneapptech/webeditor"><i class="github icon"></i>Github</a>
-        <p class="version">Dev 1.1</p>
+        <p class="version">Dev 2.0</p>
     </div>
 
     <div class="pusher">
         <!--Header menu-->
         <div class="ts fluid container">
             <div id="menu" class="ts horizontally scrollable borderless flatted menu">
-                <a class="item" href="javascript:side_bar()"><i class="sidebar icon"></i></a>
+                <a class="item" id="sidebarMenu" href="#"><i class="sidebar icon"></i></a>
                 <a class="active item" data-tab="html">HTML</a>
                 <a class="item" data-tab="css">CSS</a>
                 <a class="item" data-tab="javascript">JS</a>
-                <a class="item" href="javascript:load()">RUN</a>
-                <a class="item" href="javascript:clear()">RESET</a>
+                <a class="item" id="run" href="#">RUN</a>
+                <a class="item" id="reset" href="#">RESET</a>
                 <div class="right menu">
                     <div class="tablet or large device only"><a target="_blank" href="https://stoneapp.tech" class="item"><img class="logo" src="https://stoneapp.tech/asset/logo.png">&nbsp;Stone App</a></div>
                     <div class="mobile only"><a target="_blank" href="https://stoneapp.tech" class="item"><img class="logo" src="https://stoneapp.tech/asset/logo.png"></a></div>
@@ -37,36 +37,36 @@
         </div>
         <!--menu end-->
 
-        <div class="main ts fluid container">
+        <div id="main" class="ts fluid container">
             <div class="ts grid">
                 <div class="two column row">
                     <!--textarea-->
-                    <div id="script" class="column">
+                    <div id="code" class="column">
                         <div data-tab="html" class="ts active bottom attached tab segment">
-                            <div id="html"></div>
+                            <div class="editor" id="html"></div>
                         </div>
                         <div data-tab="css" class="ts bottom attached tab segment">
-                            <div id="css"></div>
+                            <div class="editor" id="css"></div>
                         </div>
                         <div data-tab="javascript" class="ts bottom attached tab segment">
-                            <div id="javascript"></div>
+                            <div class="editor" id="javascript"></div>
                         </div>
                     </div>
 
                     <!--Preview-->
-                    <div id="show" class="column">
+                    <div id="preview" class="column">
                         <div id="dimmer" class="ts active dimmer">
                             <div class="ts loader"></div>
                         </div>
                         <div id="label"></div>
-                        <iframe id="frame" srcdoc="">Need support of iframe.</iframe>
+                        <iframe id="iframe" srcdoc="">Need support of iframe.</iframe>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="./script.js"></script>
 </body>
 </html>
