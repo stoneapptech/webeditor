@@ -1,3 +1,7 @@
+html {
+    overflow: hidden;
+}
+
 body {
     height: 100vh;
     margin: 0;
@@ -8,7 +12,14 @@ body {
     flex-direction: column;
 }
 
+#dimmer:not(.active) {
+    display: none;
+}
+
 #main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     flex-grow: 1;
 }
 
@@ -18,11 +29,21 @@ body {
 
 .ts.grid, .ts.grid > .row {
     margin: 0;
-    height: 100%;
+    flex: 1;
+    flex-grow: 1;
 }
 
 .ts.grid > .row .column:not(.row) {
+    display: flex;
+    flex-direction: column;
     padding: 0;
+    flex: 1;
+    flex-grow: 1;
+}
+
+#code > .ts.tab.segment {
+    padding: 0;
+    margin: 0;
     height: 100%;
 }
 
@@ -44,15 +65,22 @@ body {
     overflow: hidden;
 }
 
+.iframe.wrapper {
+    display: flex;
+    flex: 1;
+    flex-grow: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 iframe {
-    height: calc(100% - 30px);
+    flex: 1;
     width: 100%;
     border: 0;
-    overflow: hidden;
 }
 
 #label {
-    width:100%;
+    width: 100%;
     background-color:slategray;
     color: white;
     padding: 5px 12px;
@@ -63,10 +91,6 @@ iframe {
 .logo {
     height: 35px;
     width: 35px;
-}
-
-.ts.tab.segment {
-    height: 100%;
 }
 
 .version {
