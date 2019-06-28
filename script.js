@@ -67,7 +67,9 @@ click($('#run'), render);
 window.addEventListener('message', async (e) => {
     console.log('onmessage');
     let data = e.data;
-    titleLabel.textContent = data.title;
+    if (data.title) {
+        titleLabel.textContent = data.title;
+    }
     await sleep(300);
     dimmer.classList.toggle('active', false);
 });
@@ -102,7 +104,16 @@ function combinePage(HTMLSource, cssSource, jsSource) {
     let postSource = `(() => {
         console.log('iframe ready');
         parent.postMessage({"status": "ready", "title": (document.title || "No title")}, "*");
-    })()`;
+    
+        // observe title changes
+        let observer = new MutationObserver((mutation, observer) => {
+            parent.postMessage({
+                "status": "titleUpdate",
+                "title": (document.title || "No title")
+            }, "*");
+        });
+        observer.observe(document.querySelector('title'), { childList: true, subtree: true });
+    })();`;
     let postScript = document.createElement('script');
     postScript.textContent = postSource;
     shadowDOM.querySelector('body').appendChild(postScript);
@@ -120,8 +131,7 @@ function render(...args) {
 
     let newDocument = combinePage(...source);
 
-    previewFrame.setAttribute("srcdoc", newDocument.documentElement.outerHTML);
-    previewFrame.srcdoc = previewFrame.srcdoc;
+    previewFrame.srcdoc = newDocument.documentElement.outerHTML;
 }
 
 // welcome
