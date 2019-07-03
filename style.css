@@ -12,8 +12,12 @@ body {
     flex-direction: column;
 }
 
+#dimmer {
+    transition-property: z-index, opacity;
+}
+
 #dimmer:not(.active) {
-    display: none;
+    z-index: -1;
 }
 
 #main {
@@ -86,6 +90,7 @@ iframe {
     padding: 5px 12px;
     font-size: 16px;
     display: block;
+    min-height: calc(1em + 10px);
 }
 
 .logo {
