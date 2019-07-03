@@ -43,6 +43,14 @@ languages.forEach((lang) => {
     editor.getSession().setMode(`ace/mode/${lang}`);
     editor.getSession().setUseWrapMode(true);
     editor.$blockScrolling = Infinity;
+
+    editor.commands.addCommand({
+        name: "renderPage",
+        bindKey: {win: "Ctrl-Enter", mac: "Command-Enter"},
+        exec: function(_editor) {
+            render();
+        }
+    });
 });
 
 ts('.menu .item').tab(); // ts menu tab
